@@ -5,19 +5,16 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PlayerScreen : MonoBehaviourPun, IPunInstantiateMagicCallback
+public class PlayerScreen : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
 {
-
     public PhotonView photonView;
     public Text PlayerNameText;
-/*
-    private void Awake()
+
+    public void OnPlayerEnteredRoom(Player newPlayer)
     {
         if (photonView.IsMine)
         {
-
             PlayerNameText.text = PhotonNetwork.NickName;
-
         }
         else
         {
@@ -25,15 +22,12 @@ public class PlayerScreen : MonoBehaviourPun, IPunInstantiateMagicCallback
             PlayerNameText.color = Color.cyan;
         }
     }
-*/
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         if (photonView.IsMine)
         {
-
             PlayerNameText.text = PhotonNetwork.NickName;
-
         }
         else
         {
