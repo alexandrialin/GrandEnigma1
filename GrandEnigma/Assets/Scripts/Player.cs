@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviourPunCallbacks
 {
     public PhotonView photonView;
     public Text PlayerNameText;
@@ -21,13 +19,17 @@ public class Player : MonoBehaviour
         {
             CheckInput();
         }
+    }
 
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
         UpdatePlayerNameText();
     }
 
     private void CheckInput()
     {
-        // Your input checking code here...
+        // Your input handling code here
     }
 
     private void UpdatePlayerNameText()
