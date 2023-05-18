@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class Player : MonoBehaviour
+public class PlayerScreen : MonoBehaviour
 {
 
     public PhotonView photonView;

@@ -5,14 +5,29 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PlayerScreen : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallback
+public class Player : MonoBehaviour
 {
     public PhotonView photonView;
     public Text PlayerNameText;
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    private void Awake()
     {
         UpdatePlayerNameText();
+    }
+
+    private void Update()
+    {
+        if (photonView.IsMine)
+        {
+            CheckInput();
+        }
+
+        UpdatePlayerNameText();
+    }
+
+    private void CheckInput()
+    {
+        // Your input checking code here...
     }
 
     private void UpdatePlayerNameText()
@@ -26,11 +41,5 @@ public class PlayerScreen : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallb
             PlayerNameText.text = photonView.Owner.NickName;
             PlayerNameText.color = Color.cyan;
         }
-    }
-
-    // Call UpdatePlayerNameText() in Update() so that it is called once per frame.
-    private void Update()
-    {
-        UpdatePlayerNameText();
     }
 }
