@@ -10,29 +10,27 @@ public class PlayerScreen : MonoBehaviourPunCallbacks, IPunInstantiateMagicCallb
     public PhotonView photonView;
     public Text PlayerNameText;
 
-    public void OnPlayerEnteredRoom(Player newPlayer)
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        UpdatePlayerNameText();
+    }
+
+    private void UpdatePlayerNameText()
     {
         if (photonView.IsMine)
         {
             PlayerNameText.text = PhotonNetwork.NickName;
         }
-        else
+        else if (photonView.Owner != null) // Check if owner is not null
         {
             PlayerNameText.text = photonView.Owner.NickName;
             PlayerNameText.color = Color.cyan;
         }
     }
 
-    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    // Call UpdatePlayerNameText() in Update() so that it is called once per frame.
+    private void Update()
     {
-        if (photonView.IsMine)
-        {
-            PlayerNameText.text = PhotonNetwork.NickName;
-        }
-        else
-        {
-            PlayerNameText.text = photonView.Owner.NickName;
-            PlayerNameText.color = Color.cyan;
-        }
+        UpdatePlayerNameText();
     }
 }
