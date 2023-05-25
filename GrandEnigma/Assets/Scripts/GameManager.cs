@@ -7,19 +7,41 @@ using Photon.Realtime;
 
 public class GameManager : MonoBehaviour
 {
-   public GameObject PlayerPrefab;
+    public static GameManager Instance;
+
+    public GameObject PlayerPrefab;
     public GameObject PlayerFeed;
     public GameObject PlayerGrid;
     public PhotonView photonView;
+    [SerializeField] private Text roomCodeText;
 
-    // Start is called before the first frame update
+    private string roomCode;
+
     private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         print("player connected");
         GameObject obj = PhotonNetwork.Instantiate(PlayerPrefab.name, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity, 0);
         photonView.RPC("ParentPlayer", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
     }
 
+    private void OnEnable()
+    {
+        roomCode = PlayerPrefs.GetString("RoomCode", "");
+        if (!string.IsNullOrEmpty(roomCode))
+        {
+            roomCodeText.text = "Room Code: " + roomCode;
+        }
+    }
 
     [PunRPC]
     void ParentPlayer(int viewID)
@@ -34,8 +56,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Failed to find target PhotonView with ViewID: " + viewID);
         }
     }
-
-
 
     public void OnPhotonPlayerConnected(Player player)
     {
