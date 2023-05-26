@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance;
 
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
         print("player connected");
         GameObject obj = PhotonNetwork.Instantiate(PlayerPrefab.name, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity, 0);
-        photonView.RPC("ParentPlayer", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
+        photonView.RPC("ParentPlayer", RpcTarget.AllBuffered);
 
     }
 
@@ -45,18 +45,16 @@ public class GameManager : MonoBehaviour
     }
 
     [PunRPC]
-    void ParentPlayer(int viewID)
+    void ParentPlayer()
     {
-        PhotonView targetView = PhotonView.Find(viewID);
-        if (targetView != null)
+        GameObject[] allUsernameObjects = GameObject.FindGameObjectsWithTag("UsernamePrefab");
+
+        foreach (GameObject userObject in allUsernameObjects)
         {
-            targetView.transform.SetParent(PlayerGrid.transform, false);
-        }
-        else
-        {
-            Debug.LogError("Failed to find target PhotonView with ViewID: " + viewID);
+            userObject.transform.SetParent(PlayerGrid.transform, false);
         }
     }
+
 
     public void OnPhotonPlayerConnect(Photon.Realtime.Player player)
     {
