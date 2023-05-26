@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnPhotonPlayerConnected(Player player)
+    public void OnPhotonPlayerConnected(Photon.Realtime.Player player)
     {
         GameObject obj = PhotonNetwork.Instantiate(PlayerPrefab.name, new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z), Quaternion.identity, 0);
         photonView.RPC("ParentPlayer", RpcTarget.All, obj.GetComponent<PhotonView>().ViewID);
